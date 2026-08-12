@@ -14,7 +14,6 @@ module Foundation
       STATUSES = %w[active pending sold off_market].freeze
       LISTING_TYPES = %w[sale rent].freeze
 
-      belongs_to :organization
       has_many :opportunities, class_name: "Foundation::Crm::Opportunity", dependent: :nullify, inverse_of: :property
 
       validates :address_line_1, presence: true, length: { maximum: 200 }
