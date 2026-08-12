@@ -3,7 +3,7 @@
 <section class="md-page md-stack">
   <header class="md-actions" style="justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
     <div>
-      <p class="md-section__eyebrow">CRM</p>
+      <p class="md-section__eyebrow">Ashgrove Realty</p>
       <h1>Contacts</h1>
     </div>
     <%= link_to "New contact", new_crm_contact_path, class: "md-button md-button--filled" %>
@@ -28,14 +28,15 @@
   <div class="table-scroll">
     <table>
       <thead>
-        <tr><th>Name</th><th>Email</th><th>Company</th><th>Owner</th><th></th></tr>
+        <tr><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Owner</th><th></th></tr>
       </thead>
       <tbody>
         <% @contacts.each do |contact| %>
           <tr>
             <td><%= contact.display_name %></td>
+            <td><%= contact.role.humanize %></td>
             <td><%= contact.email %></td>
-            <td><%= contact.company&.name %></td>
+            <td><%= contact.phone %></td>
             <td><%= crm_user_label(contact.owner) %></td>
             <td><%= link_to "View", crm_contact_path(contact) %></td>
           </tr>
