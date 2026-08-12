@@ -18,11 +18,14 @@ module Foundation
       has_many :taggings, as: :taggable, class_name: "Foundation::Crm::Tagging", dependent: :destroy
       has_many :tags, through: :taggings
 
+      ROLES = %w[buyer seller other].freeze
+
       validates :first_name, length: { maximum: 100 }
       validates :last_name, length: { maximum: 100 }
       validates :email, length: { maximum: 254 }, allow_blank: true
       validates :phone, length: { maximum: 60 }, allow_blank: true
       validates :title, length: { maximum: 120 }, allow_blank: true
+      validates :role, inclusion: { in: ROLES }
       validate :identity_present
       validate :company_in_same_organization
 
@@ -54,6 +57,7 @@ module Foundation
         self.email = email.to_s.strip.downcase.presence
         self.phone = phone.to_s.strip.presence
         self.title = title.to_s.strip.presence
+        self.role = "other" if role.blank?
       end
 
       def identity_present
