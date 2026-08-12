@@ -1,0 +1,51 @@
+<% title "Properties" %>
+
+<section class="md-page md-stack">
+  <header class="md-actions" style="justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+    <div>
+      <p class="md-section__eyebrow">Ashgrove Realty</p>
+      <h1>Properties</h1>
+    </div>
+    <%= link_to "New property", new_crm_property_path, class: "md-button md-button--filled" %>
+  </header>
+
+  <%= render "foundation/crm/shared/subnav" %>
+
+  <%= form_with url: crm_properties_path, method: :get, class: "md-actions", local: true do %>
+    <div class="md-field" style="flex: 1; min-width: 200px;">
+      <%= label_tag :q, "Search" %>
+      <%= text_field_tag :q, params[:q], placeholder: "Address, city, MLS" %>
+    </div>
+    <div class="md-field">
+      <%= label_tag :status, "Status" %>
+      <%= select_tag :status, options_for_select([ [ "Any", "" ] ] + Foundation::Crm::Property::STATUSES.map { |s| [ s.humanize, s ] }, params[:status]) %>
+    </div>
+    <%= submit_tag "Filter", class: "md-button md-button--tonal" %>
+  <% end %>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Address</th><th>Type</th><th>Beds/Baths</th><th>Price</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <% @properties.each do |property| %>
+          <tr>
+            <td><%= property.display_name %><% if property.mls_number.present? %> <span class="text-md-on-surface-variant">· MLS <%= property.mls_number %></span><% end %></td>
+            <td><%= property.property_type.humanize %></td>
+            <td><%= property.beds %>/<%= property.baths %></td>
+            <td><%= crm_money(property.price_cents) %></td>
+            <td><%= property.status.humanize %></td>
+            <td><%= link_to "View", crm_property_path(property) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%
+    qs = []
+    qs << "q=#{ERB::Util.url_encode(params[:q])}" if params[:q].present?
+    qs << "status=#{ERB::Util.url_encode(params[:status])}" if params[:status].present?
+    base = qs.any? ? "#{crm_properties_path}?#{qs.join('&')}" : crm_properties_path
+  %>
+  <%= crm_pagination(base_path: base, page: @page, has_next: @has_next_page) %>
+</section>
