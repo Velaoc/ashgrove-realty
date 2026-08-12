@@ -93,8 +93,8 @@ module Foundation
 
       def opportunity_params
         permitted = params.require(:opportunity).permit(
-          :name, :amount_cents, :currency, :expected_close_on, :description,
-          :pipeline_id, :pipeline_stage_id, :company_id, :contact_id, :owner_id
+          :name, :amount_cents, :amount_dollars, :currency, :expected_close_on, :description,
+          :pipeline_id, :pipeline_stage_id, :company_id, :contact_id, :property_id, :owner_id
         )
         pipeline_id = permitted[:pipeline_id].presence || @pipeline.id
         permitted[:pipeline_id] = crm_scope(Pipeline).where(id: pipeline_id).pick(:id)
@@ -108,6 +108,9 @@ module Foundation
         end
         if permitted[:contact_id].present?
           permitted[:contact_id] = crm_scope(Contact).where(id: permitted[:contact_id]).pick(:id)
+        end
+        if permitted[:property_id].present?
+          permitted[:property_id] = crm_scope(Property).where(id: permitted[:property_id]).pick(:id)
         end
         if permitted.key?(:owner_id)
           raw = permitted[:owner_id].presence
