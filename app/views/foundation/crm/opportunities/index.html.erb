@@ -1,12 +1,12 @@
-<% title "Opportunities" %>
+<% title "Deals" %>
 
 <section class="md-page md-stack">
   <header class="md-actions" style="justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
     <div>
-      <p class="md-section__eyebrow">CRM</p>
-      <h1>Opportunities</h1>
+      <p class="md-section__eyebrow">Ashgrove Realty</p>
+      <h1>Deals</h1>
     </div>
-    <%= link_to "New opportunity", new_crm_opportunity_path, class: "md-button md-button--filled" %>
+    <%= link_to "New deal", new_crm_opportunity_path, class: "md-button md-button--filled" %>
   </header>
 
   <%= render "foundation/crm/shared/subnav" %>
@@ -35,14 +35,14 @@
 
   <div class="table-scroll">
     <table>
-      <thead><tr><th>Name</th><th>Stage</th><th>Amount</th><th>Status</th><th>Owner</th><th></th></tr></thead>
+      <thead><tr><th>Deal</th><th>Stage</th><th>Amount</th><th>Contact</th><th>Owner</th><th></th></tr></thead>
       <tbody>
         <% @opportunities.each do |opportunity| %>
           <tr>
             <td><%= opportunity.name %></td>
             <td><%= opportunity.pipeline_stage&.name %></td>
             <td><%= crm_money(opportunity.amount_cents, opportunity.currency) %></td>
-            <td><%= opportunity.status.humanize %></td>
+            <td><%= opportunity.contact ? link_to(opportunity.contact.display_name, crm_contact_path(opportunity.contact)) : "—" %></td>
             <td><%= crm_user_label(opportunity.owner) %></td>
             <td><%= link_to "View", crm_opportunity_path(opportunity) %></td>
           </tr>
