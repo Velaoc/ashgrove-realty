@@ -89,6 +89,7 @@ Rails.application.routes.draw do
     scope "crm", module: "foundation/crm", as: :crm do
       root to: "home#show"
       resources :contacts
+      resources :properties
       resources :companies
       resources :leads do
         post :assign, on: :member
