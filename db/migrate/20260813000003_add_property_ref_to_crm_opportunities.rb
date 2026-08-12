@@ -2,6 +2,6 @@
 
 class AddPropertyRefToCrmOpportunities < ActiveRecord::Migration[8.0]
   def change
-    add_reference :crm_opportunities, :property, foreign_key: { to_table: :crm_properties }
+    add_reference :crm_opportunities, :property, foreign_key: { to_table: :crm_properties }, index: true
   end
 end
