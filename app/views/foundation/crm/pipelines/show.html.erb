@@ -33,7 +33,7 @@
   </div>
 
   <section class="md-card md-card--filled md-stack">
-    <h2>Opportunities in this pipeline</h2>
+    <h2>Deals in this pipeline</h2>
     <% if @opportunities.any? %>
       <ul style="list-style: none; padding: 0; margin: 0;" class="md-stack">
         <% @opportunities.each do |opportunity| %>
@@ -44,7 +44,7 @@
         <% end %>
       </ul>
     <% else %>
-      <p class="text-md-on-surface-variant">No opportunities yet.</p>
+      <p class="text-md-on-surface-variant">No deals yet.</p>
     <% end %>
   </section>
 </section>
