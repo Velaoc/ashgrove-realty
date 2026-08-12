@@ -59,8 +59,10 @@ module Foundation
 
       def contact_params
         permitted = params.require(:contact).permit(
-          :first_name, :last_name, :email, :phone, :title, :role, :company_id, :owner_id
+          :first_name, :last_name, :email, :phone, :title, :company_id, :owner_id
         )
+        role = params.dig(:contact, :role).to_s.presence_in(Contact::ROLES)
+        permitted[:role] = role if role
         sanitize_org_refs!(permitted, company_id: Company, owner_id: :member)
         permitted
       end
