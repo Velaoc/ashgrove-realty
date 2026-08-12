@@ -13,6 +13,7 @@ module Foundation
       belongs_to :pipeline_stage, class_name: "Foundation::Crm::PipelineStage", inverse_of: :opportunities
       belongs_to :company, class_name: "Foundation::Crm::Company", optional: true, inverse_of: :opportunities
       belongs_to :contact, class_name: "Foundation::Crm::Contact", optional: true, inverse_of: :opportunities
+      belongs_to :property, class_name: "Foundation::Crm::Property", optional: true, inverse_of: :opportunities
       belongs_to :owner, class_name: "User", optional: true
 
       has_many :notes, as: :notable, class_name: "Foundation::Crm::Note", dependent: :destroy
@@ -107,7 +108,7 @@ module Foundation
       end
 
       def associations_in_same_organization
-        %i[pipeline pipeline_stage company contact].each do |assoc|
+        %i[pipeline pipeline_stage company contact property].each do |assoc|
           record = public_send(assoc)
           next if record.blank? || organization_id.blank?
           next if record.organization_id == organization_id
