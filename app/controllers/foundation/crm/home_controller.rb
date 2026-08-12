@@ -4,6 +4,7 @@ module Foundation
   module Crm
     class HomeController < BaseController
       def show
+        demo_seed!
         ensure_default_pipeline!
         @contacts_count = crm_scope(Contact).count
         @properties_count = crm_scope(Property).count
