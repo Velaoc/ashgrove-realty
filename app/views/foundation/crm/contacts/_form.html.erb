@@ -4,11 +4,8 @@
   <div class="md-field"><%= form.label :last_name %><%= form.text_field :last_name, maxlength: 100 %></div>
   <div class="md-field"><%= form.label :email %><%= form.email_field :email, maxlength: 254 %></div>
   <div class="md-field"><%= form.label :phone %><%= form.telephone_field :phone, maxlength: 60 %></div>
+  <div class="md-field"><%= form.label :role %><%= form.select :role, Foundation::Crm::Contact::ROLES.map { |r| [ r.humanize, r ] } %></div>
   <div class="md-field"><%= form.label :title %><%= form.text_field :title, maxlength: 120 %></div>
-  <div class="md-field">
-    <%= form.label :company_id, "Company" %>
-    <%= form.collection_select :company_id, @companies, :id, :name, { include_blank: "None" } %>
-  </div>
   <div class="md-field">
     <%= form.label :owner_id, "Owner" %>
     <%= form.collection_select :owner_id, @members, :id, :email, { include_blank: "Unassigned" } %>
