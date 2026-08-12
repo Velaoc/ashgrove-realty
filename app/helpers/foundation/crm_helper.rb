@@ -12,12 +12,10 @@ module Foundation
       [
         { label: "Overview", href: crm_root_path, active: path == crm_root_path },
         { label: "Contacts", href: crm_contacts_path, active: path.start_with?("/crm/contacts") },
-        { label: "Companies", href: crm_companies_path, active: path.start_with?("/crm/companies") },
-        { label: "Leads", href: crm_leads_path, active: path.start_with?("/crm/leads") },
-        { label: "Opportunities", href: crm_opportunities_path, active: path.start_with?("/crm/opportunities") },
+        { label: "Properties", href: crm_properties_path, active: path.start_with?("/crm/properties") },
+        { label: "Deals", href: crm_opportunities_path, active: path.start_with?("/crm/opportunities") },
         { label: "Pipelines", href: crm_pipelines_path, active: path.start_with?("/crm/pipelines") },
-        { label: "Tasks", href: crm_tasks_path, active: path.start_with?("/crm/tasks") },
-        { label: "Tags", href: crm_tags_path, active: path.start_with?("/crm/tags") }
+        { label: "Tasks", href: crm_tasks_path, active: path.start_with?("/crm/tasks") }
       ]
     end
 
