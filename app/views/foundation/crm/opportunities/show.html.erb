@@ -3,7 +3,7 @@
 <section class="md-page md-stack">
   <header class="md-actions" style="justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
     <div>
-      <p class="md-section__eyebrow">Opportunity</p>
+      <p class="md-section__eyebrow">Deal</p>
       <h1><%= @opportunity.name %></h1>
       <p class="text-md-on-surface-variant">
         <%= @opportunity.pipeline_stage&.name %> · <%= crm_money(@opportunity.amount_cents, @opportunity.currency) %> · <%= @opportunity.status.humanize %>
@@ -11,7 +11,7 @@
     </div>
     <div class="md-actions">
       <%= link_to "Edit", edit_crm_opportunity_path(@opportunity), class: "md-button md-button--tonal" %>
-      <%= button_to "Delete", crm_opportunity_path(@opportunity), method: :delete, class: "md-button md-button--text", form: { data: { turbo_confirm: "Delete this opportunity?" } } %>
+      <%= button_to "Delete", crm_opportunity_path(@opportunity), method: :delete, class: "md-button md-button--text", form: { data: { turbo_confirm: "Delete this deal?" } } %>
     </div>
   </header>
 
@@ -24,7 +24,7 @@
         <tr><th>Stage</th><td><%= @opportunity.pipeline_stage.name %></td></tr>
         <tr><th>Amount</th><td><%= crm_money(@opportunity.amount_cents, @opportunity.currency) %></td></tr>
         <tr><th>Expected close</th><td><%= @opportunity.expected_close_on || "—" %></td></tr>
-        <tr><th>Company</th><td><%= @opportunity.company ? link_to(@opportunity.company.name, crm_company_path(@opportunity.company)) : "—" %></td></tr>
+        <tr><th>Property</th><td><%= @opportunity.property ? link_to(@opportunity.property.display_name, crm_property_path(@opportunity.property)) : "—" %></td></tr>
         <tr><th>Contact</th><td><%= @opportunity.contact ? link_to(@opportunity.contact.display_name, crm_contact_path(@opportunity.contact)) : "—" %></td></tr>
         <tr><th>Owner</th><td><%= crm_user_label(@opportunity.owner) %></td></tr>
         <tr><th>Description</th><td><%= simple_format(@opportunity.description.presence || "—") %></td></tr>
