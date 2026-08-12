@@ -1,25 +1,20 @@
 <%= render "foundation/crm/shared/errors", record: opportunity %>
 <%= form_with model: opportunity, url: opportunity.persisted? ? crm_opportunity_path(opportunity) : crm_opportunities_path, class: "md-stack" do |form| %>
-  <div class="md-field"><%= form.label :name %><%= form.text_field :name, required: true, maxlength: 200 %></div>
-  <div class="md-field"><%= form.label :amount_cents, "Amount (cents)" %><%= form.number_field :amount_cents, min: 0, step: 1, required: true %></div>
-  <div class="md-field"><%= form.label :currency %><%= form.text_field :currency, maxlength: 3, required: true %></div>
+  <div class="md-field"><%= form.label :name %><%= form.text_field :name, required: true, maxlength: 200, placeholder: "e.g. Sale of 214 Elm Street" %></div>
+  <div class="md-field"><%= form.label :amount_dollars, "Amount (USD)" %><%= form.number_field :amount_dollars, min: 0, step: 0.01, value: (opportunity.amount_cents.to_f / 100).round(2) %></div>
   <div class="md-field"><%= form.label :expected_close_on, "Expected close" %><%= form.date_field :expected_close_on %></div>
   <div class="md-field"><%= form.label :description %><%= form.text_area :description, rows: 4 %></div>
   <div class="md-field">
-    <%= form.label :pipeline_id, "Pipeline" %>
-    <%= form.collection_select :pipeline_id, @pipelines, :id, :name %>
-  </div>
-  <div class="md-field">
-    <%= form.label :pipeline_stage_id, "Stage" %>
-    <%= form.collection_select :pipeline_stage_id, @stages, :id, :name %>
-  </div>
-  <div class="md-field">
-    <%= form.label :company_id, "Company" %>
-    <%= form.collection_select :company_id, @companies, :id, :name, { include_blank: "None" } %>
+    <%= form.label :property_id, "Property" %>
+    <%= form.collection_select :property_id, @properties, :id, :display_name, { include_blank: "None" } %>
   </div>
   <div class="md-field">
     <%= form.label :contact_id, "Contact" %>
     <%= form.collection_select :contact_id, @contacts, :id, :display_name, { include_blank: "None" } %>
+  </div>
+  <div class="md-field">
+    <%= form.label :pipeline_stage_id, "Stage" %>
+    <%= form.collection_select :pipeline_stage_id, @stages, :id, :name, { include_blank: "Select a stage" } %>
   </div>
   <div class="md-field">
     <%= form.label :owner_id, "Owner" %>
