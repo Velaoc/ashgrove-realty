@@ -93,13 +93,10 @@ module Foundation
 
       def opportunity_params
         permitted = params.require(:opportunity).permit(
-          :name, :amount_cents, :currency, :expected_close_on, :description,
+          :name, :amount_cents, :amount_dollars, :currency, :expected_close_on, :description,
           :pipeline_id, :pipeline_stage_id, :company_id, :contact_id, :property_id, :owner_id
         )
-        if permitted[:amount_cents].blank? && params[:opportunity][:amount_dollars].present?
-          dollars = params[:opportunity][:amount_dollars].to_s.gsub(/[^\d.]/, "").to_f
-          permitted[:amount_cents] = (dollars * 100).round
-        end
+        permitted.delete(:amount_dollars) if permitted.key?(:amount_dollars)
         pipeline_id = permitted[:pipeline_id].presence || @pipeline.id
         permitted[:pipeline_id] = crm_scope(Pipeline).where(id: pipeline_id).pick(:id)
         if permitted[:pipeline_stage_id].present?
