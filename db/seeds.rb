@@ -5,5 +5,7 @@
 # credentials. The same logic runs lazily on first CRM visit in production
 # (Foundation::Crm::DemoSeeder).
 
-org = Organization.order(:created_at).first
-Foundation::Crm::DemoSeeder.seed!(org) if org
+if defined?(Organizations::Organization) && Organizations::Organization.table_exists?
+  org = Organizations::Organization.order(:created_at).first
+  Foundation::Crm::DemoSeeder.seed!(org) if org
+end
