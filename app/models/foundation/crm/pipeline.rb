@@ -8,12 +8,13 @@ module Foundation
       self.table_name = "crm_pipelines"
 
       DEFAULT_STAGES = [
-        { name: "Qualification", position: 0, probability: 10 },
-        { name: "Needs analysis", position: 1, probability: 25 },
-        { name: "Proposal", position: 2, probability: 50 },
-        { name: "Negotiation", position: 3, probability: 75 },
-        { name: "Closed won", position: 4, probability: 100, closed_won: true },
-        { name: "Closed lost", position: 5, probability: 0, closed_lost: true }
+        { name: "New", position: 0, probability: 10 },
+        { name: "Contacted", position: 1, probability: 25 },
+        { name: "Showing", position: 2, probability: 40 },
+        { name: "Offer", position: 3, probability: 60 },
+        { name: "Under contract", position: 4, probability: 85 },
+        { name: "Closed won", position: 5, probability: 100, closed_won: true },
+        { name: "Closed lost", position: 6, probability: 0, closed_lost: true }
       ].freeze
 
       has_many :stages, -> { order(:position, :id) },
@@ -34,7 +35,7 @@ module Foundation
         return existing if existing
 
         transaction do
-          pipeline = create!(organization: organization, name: "Sales", position: 0)
+          pipeline = create!(organization: organization, name: "Real Estate", position: 0)
           DEFAULT_STAGES.each do |attrs|
             pipeline.stages.create!(attrs.merge(organization: organization))
           end
