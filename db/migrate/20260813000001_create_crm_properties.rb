@@ -3,7 +3,7 @@
 class CreateCrmProperties < ActiveRecord::Migration[8.0]
   def change
     create_table :crm_properties do |t|
-      t.references :organization, null: false, foreign_key: { to_table: :organizations }
+      t.references :organization, null: false, index: false
       t.string :address_line_1, null: false, default: ""
       t.string :address_line_2, default: ""
       t.string :city, null: false, default: ""
