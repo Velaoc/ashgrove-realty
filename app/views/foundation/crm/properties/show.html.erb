@@ -1,0 +1,47 @@
+<% title @property.display_name %>
+
+<section class="md-page md-stack">
+  <header class="md-actions" style="justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+    <div>
+      <p class="md-section__eyebrow">Property</p>
+      <h1><%= @property.display_name %></h1>
+      <p class="text-md-on-surface-variant"><%= @property.property_type.humanize %> · <%= @property.status.humanize %> · <%= crm_money(@property.price_cents) %></p>
+    </div>
+    <div class="md-actions">
+      <%= link_to "Edit", edit_crm_property_path(@property), class: "md-button md-button--tonal" %>
+      <%= button_to "Delete", crm_property_path(@property), method: :delete, class: "md-button md-button--text", form: { data: { turbo_confirm: "Delete this property?" } } %>
+    </div>
+  </header>
+
+  <%= render "foundation/crm/shared/subnav" %>
+
+  <div class="table-scroll">
+    <table>
+      <tbody>
+        <tr><th>Address</th><td><%= @property.full_address %></td></tr>
+        <tr><th>Listing type</th><td><%= @property.listing_type.humanize %></td></tr>
+        <tr><th>MLS number</th><td><%= @property.mls_number.presence || "—" %></td></tr>
+        <tr><th>Beds / Baths</th><td><%= @property.beds %> / <%= @property.baths %></td></tr>
+        <tr><th>Square feet</th><td><%= @property.sqft.present? && @property.sqft > 0 ? number_with_delimiter(@property.sqft) : "—" %></td></tr>
+        <tr><th>Status</th><td><%= @property.status.humanize %></td></tr>
+        <tr><th>Description</th><td><%= simple_format(@property.description.presence || "—") %></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section class="md-card md-card--outlined md-stack">
+    <h2>Deals on this property</h2>
+    <% if @deals.any? %>
+      <ul style="list-style: none; padding: 0; margin: 0;" class="md-stack">
+        <% @deals.each do |deal| %>
+          <li>
+            <%= link_to deal.name, crm_opportunity_path(deal) %>
+            <span class="text-md-on-surface-variant"> · <%= deal.pipeline_stage&.name %><% if deal.contact %> · <%= deal.contact.display_name %><% end %> · <%= crm_money(deal.amount_cents, deal.currency) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-md-on-surface-variant">No deals linked to this property yet.</p>
+    <% end %>
+  </section>
+</section>
