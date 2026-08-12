@@ -1,0 +1,22 @@
+<%= render "foundation/crm/shared/errors", record: property %>
+<%= form_with model: property, url: property.persisted? ? crm_property_path(property) : crm_properties_path, class: "md-stack" do |form| %>
+  <div class="md-field"><%= form.label :address_line_1, "Address line 1" %><%= form.text_field :address_line_1, required: true, maxlength: 200 %></div>
+  <div class="md-field"><%= form.label :address_line_2, "Address line 2" %><%= form.text_field :address_line_2, maxlength: 200 %></div>
+  <div class="md-field"><%= form.label :city %><%= form.text_field :city, required: true, maxlength: 120 %></div>
+  <div class="md-field"><%= form.label :state %><%= form.text_field :state, maxlength: 80 %></div>
+  <div class="md-field"><%= form.label :postal_code %><%= form.text_field :postal_code, maxlength: 20 %></div>
+  <div class="md-field"><%= form.label :country %><%= form.text_field :country, maxlength: 2, value: property.country.presence || "US" %></div>
+  <div class="md-field"><%= form.label :price_cents, "Price (cents)" %><%= form.number_field :price_cents, min: 0, step: 1, required: true %></div>
+  <div class="md-field"><%= form.label :listing_type %><%= form.select :listing_type, Foundation::Crm::Property::LISTING_TYPES.map { |t| [ t.humanize, t ] } %></div>
+  <div class="md-field"><%= form.label :property_type %><%= form.select :property_type, Foundation::Crm::Property::TYPES.map { |t| [ t.humanize, t ] } %></div>
+  <div class="md-field"><%= form.label :beds %><%= form.number_field :beds, step: 0.5, min: 0 %></div>
+  <div class="md-field"><%= form.label :baths %><%= form.number_field :baths, step: 0.5, min: 0 %></div>
+  <div class="md-field"><%= form.label :sqft, "Square feet" %><%= form.number_field :sqft, min: 0 %></div>
+  <div class="md-field"><%= form.label :status %><%= form.select :status, Foundation::Crm::Property::STATUSES.map { |s| [ s.humanize, s ] } %></div>
+  <div class="md-field"><%= form.label :mls_number, "MLS number" %><%= form.text_field :mls_number, maxlength: 60 %></div>
+  <div class="md-field"><%= form.label :description %><%= form.text_area :description, rows: 4 %></div>
+  <div class="md-actions">
+    <%= form.submit class: "md-button md-button--filled" %>
+    <%= link_to "Cancel", property.persisted? ? crm_property_path(property) : crm_properties_path, class: "md-button md-button--text" %>
+  </div>
+<% end %>
