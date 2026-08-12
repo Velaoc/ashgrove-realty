@@ -22,6 +22,8 @@ module Foundation
       has_many :taggings, as: :taggable, class_name: "Foundation::Crm::Tagging", dependent: :destroy
       has_many :tags, through: :taggings
 
+      attr_accessor :amount_dollars
+
       validates :name, presence: true, length: { maximum: 200 }
       validates :amount_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
       validates :currency, format: { with: /\A[A-Z]{3}\z/ }
@@ -96,6 +98,7 @@ module Foundation
       def normalize_fields
         self.name = name.to_s.strip
         self.currency = currency.to_s.strip.upcase.presence || "USD"
+        self.amount_cents = (amount_dollars.to_s.gsub(/[^\d.]/, "").to_f * 100).round if amount_dollars.present?
         self.amount_cents = 0 if amount_cents.nil?
         self.status = "open" if status.blank?
         self.description = description.to_s
