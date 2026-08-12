@@ -6,9 +6,10 @@ module Foundation
       def show
         ensure_default_pipeline!
         @contacts_count = crm_scope(Contact).count
-        @companies_count = crm_scope(Company).count
-        @leads_count = crm_scope(Lead).where.not(status: %w[converted disqualified]).count
-        @open_opportunities_count = crm_scope(Opportunity).where(status: "open").count
+        @properties_count = crm_scope(Property).count
+        @active_properties_count = crm_scope(Property).where(status: "active").count
+        @open_deals_count = crm_scope(Opportunity).where(status: "open").count
+        @pipeline_value_cents = crm_scope(Opportunity).where(status: "open").sum(:amount_cents)
         @open_tasks = crm_scope(Task).open_tasks.ordered.limit(8)
         @recent_activities = crm_scope(Activity).ordered.limit(12)
       end
