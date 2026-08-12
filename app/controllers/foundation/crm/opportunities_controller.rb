@@ -7,7 +7,7 @@ module Foundation
       before_action :set_opportunity, only: %i[show edit update destroy move_stage assign]
 
       def index
-        scope = crm_scope(Opportunity).includes(:pipeline_stage, :owner, :company).ordered
+        scope = crm_scope(Opportunity).includes(:pipeline_stage, :owner, :company, :property).ordered
         scope = scope.search(params[:q]) if params[:q].present?
         scope = scope.with_status(params[:status]) if params[:status].present?
         scope = scope.in_stage(params[:stage_id]) if params[:stage_id].present?
@@ -39,7 +39,7 @@ module Foundation
         @opportunity.pipeline ||= @pipeline
         if @opportunity.save
           record_created(@opportunity)
-          redirect_to crm_opportunity_path(@opportunity), notice: "Opportunity created."
+          redirect_to crm_opportunity_path(@opportunity), notice: "Deal created."
         else
           load_form_collections
           render :new, status: :unprocessable_content
@@ -52,7 +52,7 @@ module Foundation
 
       def update
         if @opportunity.update(opportunity_params)
-          redirect_to crm_opportunity_path(@opportunity), notice: "Opportunity updated."
+          redirect_to crm_opportunity_path(@opportunity), notice: "Deal updated."
         else
           load_form_collections
           render :edit, status: :unprocessable_content
@@ -61,7 +61,7 @@ module Foundation
 
       def destroy
         @opportunity.destroy!
-        redirect_to crm_opportunities_path, notice: "Opportunity deleted."
+        redirect_to crm_opportunities_path, notice: "Deal deleted."
       end
 
       def move_stage
@@ -82,7 +82,7 @@ module Foundation
         end
 
         @opportunity.assign_owner!(owner, actor: current_user)
-        redirect_to crm_opportunity_path(@opportunity), notice: owner ? "Opportunity assigned." : "Opportunity unassigned."
+        redirect_to crm_opportunity_path(@opportunity), notice: owner ? "Deal assigned." : "Deal unassigned."
       end
 
       private
@@ -93,9 +93,13 @@ module Foundation
 
       def opportunity_params
         permitted = params.require(:opportunity).permit(
-          :name, :amount_cents, :amount_dollars, :currency, :expected_close_on, :description,
+          :name, :amount_cents, :currency, :expected_close_on, :description,
           :pipeline_id, :pipeline_stage_id, :company_id, :contact_id, :property_id, :owner_id
         )
+        if permitted[:amount_cents].blank? && params[:opportunity][:amount_dollars].present?
+          dollars = params[:opportunity][:amount_dollars].to_s.gsub(/[^\d.]/, "").to_f
+          permitted[:amount_cents] = (dollars * 100).round
+        end
         pipeline_id = permitted[:pipeline_id].presence || @pipeline.id
         permitted[:pipeline_id] = crm_scope(Pipeline).where(id: pipeline_id).pick(:id)
         if permitted[:pipeline_stage_id].present?
@@ -122,18 +126,11 @@ module Foundation
 
       def load_form_collections
         @pipelines = crm_scope(Pipeline).ordered
-        @stages = crm_scope(PipelineStage).where(pipeline: @opportunity&.pipeline || @pipeline).ordered
+        @stages = @pipelines.flat_map(&:stages)
         @companies = crm_scope(Company).ordered
-        @contacts = crm_scope(Contact).ordered.limit(500)
+        @contacts = crm_scope(Contact).ordered
+        @properties = crm_scope(Property).ordered
         @members = organization_members
-      end
-
-      def load_timeline(record)
-        @notes = crm_scope(Note).where(notable: record).includes(:author).ordered.limit(50)
-        @tasks = crm_scope(Task).where(taskable: record).ordered.limit(50)
-        @activities = crm_scope(Activity).for_trackable(record).includes(:actor).ordered.limit(50)
-        @note = crm_scope(Note).new(notable: record)
-        @task = crm_scope(Task).new(taskable: record, assignee: current_user)
       end
     end
   end
