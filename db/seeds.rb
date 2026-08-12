@@ -7,5 +7,5 @@
 
 if defined?(Organizations::Organization) && Organizations::Organization.table_exists?
   org = Organizations::Organization.order(:created_at).first
-  Foundation::Crm::DemoSeeder.seed!(org) if org
+  Foundation::Crm::DemoSeeder.seed!(org) if org && Foundation.module_available?("crm")
 end
