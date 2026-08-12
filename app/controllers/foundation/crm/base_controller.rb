@@ -17,6 +17,14 @@ module Foundation
         redirect_to organizations.organizations_path, alert: "Choose an organization first."
       end
 
+      def demo_seed!
+        return unless Rails.env.production?
+
+        DemoSeeder.seed!(@organization) if @organization
+      rescue StandardError
+        # Demo data is a nicety; the app must work without it.
+      end
+
       def crm_scope(model)
         model.for_organization(@organization)
       end
