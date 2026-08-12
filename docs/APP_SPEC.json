@@ -1,0 +1,67 @@
+{
+  "name": "Ashgrove Realty",
+  "purpose": "A CRM for a real estate office: track contacts (buyers and sellers), property listings, and deals through a sales pipeline, with notes on every contact.",
+  "actors": [
+    "agent (office staff)",
+    "admin (office manager)"
+  ],
+  "entities": [
+    {
+      "name": "Contact",
+      "relationships": [
+        "organization-scoped",
+        "has many notes",
+        "can be a buyer or seller",
+        "linked to deals"
+      ]
+    },
+    {
+      "name": "Note",
+      "relationships": [
+        "belongs to a contact"
+      ]
+    },
+    {
+      "name": "Property",
+      "relationships": [
+        "belongs to the office",
+        "can be linked to a deal"
+      ]
+    },
+    {
+      "name": "Deal",
+      "relationships": [
+        "belongs to a contact",
+        "optionally references a property",
+        "has a pipeline stage"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "name": "Manage contacts",
+      "description": "Create, edit, and view buyers and sellers with their details"
+    },
+    {
+      "name": "Log notes on contacts",
+      "description": "Add timestamped notes to any contact and see them in chronological order"
+    },
+    {
+      "name": "Add properties",
+      "description": "Record property listings with address, price, beds/baths, status"
+    },
+    {
+      "name": "Run the deal pipeline",
+      "description": "Create deals, attach a contact (and optionally a property), and move them through stages: New, Contacted, Showing, Offer, Under Contract, Closed"
+    },
+    {
+      "name": "View the pipeline",
+      "description": "See all deals grouped by stage and drill into any deal"
+    }
+  ],
+  "modules": [
+    "crm"
+  ],
+  "integrations": [],
+  "seed_demo": "A handful of contacts (mix of buyers and sellers), a few property listings at different statuses, several deals spread across pipeline stages with different values, and sample notes on contacts so every screen reads real."
+}
